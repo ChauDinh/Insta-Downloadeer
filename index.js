@@ -1,33 +1,34 @@
-const pu = require("puppeteer");
-const f = require("fs");
-const dl = require("image-downloader");
+const puppeteer = require("puppeteer");
+const fs = require("fs");
+const imageDownloader = require("image-downloader");
 
 async function main() {
   // Open new page, then go to that page
-  var brs = await pu.launch();
-  const pg = await brs.newPage();
-  await pg.goto("https://www.instagram.com/phammingngoc/");
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
+  await page.goto("https://www.instagram.com/phammingngoc/");
 
   // If there is no folder called "result", then create
-  if (!f.existsSync("./result")) {
-    f.mkdirSync("./result");
+  if (!fs.existsSync("./result")) {
+    fs.mkdirSync("./result");
   }
   // Get image attribute, called "srcset"
-  const srcs = await pg.evaluate(() => {
+  const imageSrcSets = await page.evaluate(() => {
     const imgs = Array.from(document.querySelectorAll("article img"));
-    const srcs = imgs.map(i => i.getAttribute("srcset"));
-    return srcs;
+    const srcSetAttribute = imgs.map(i => i.getAttribute("srcset"));
+    return srcSetAttribute;
   });
 
-  await brs.close();
+  await browser.close();
 
   // Process and download images
-  for (let i = 0; i < srcs.length; i++) {
-    const sr = srcs[i];
-    const s = sr.split(",");
-    const rs = s[s.length - 1].split(" ")[0];
-    dl({
-      url: rs,
+  for (let i = 0; i < imageSrcSets.length; i++) {
+    const srcSet = imageSrcSets[i];
+    const splitedSrc = srcSet.split(",");
+    const imgSrc = splitedSrc[splitedSrc.length - 1].split(" ")[0];
+    
+    imageDownloader({
+      url: imgSrc,
       dest: "./result"
     });
   }
