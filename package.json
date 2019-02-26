@@ -1,0 +1,16 @@
+{
+  "name": "clean_code",
+  "version": "1.0.0",
+  "description": "A \"Clean code\" practice for downloading Instagram images",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Chau Dinh",
+  "license": "MIT",
+  "dependencies": {
+    "fs": "0.0.1-security",
+    "image-downloader": "^3.4.2",
+    "puppeteer": "^1.12.2"
+  }
+}
